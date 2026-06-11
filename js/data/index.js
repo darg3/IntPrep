@@ -21,7 +21,11 @@ window.CATEGORIES = [
     "cs50-fundamentals",
     "cs50-algorithms",
     "ai-prompts",
-    "interview"
+    "interview",
+    "interview-web",
+    "interview-systems",
+    "interview-practices",
+    "interview-behavioral"
   ];
 
   var all = [];
