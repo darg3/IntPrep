@@ -1,0 +1,169 @@
+/* media-queries.css — ALL responsive and media-dependent rules live in this file only */
+
+/* Tablets and small laptops */
+@media (max-width: 860px) {
+  .header-inner {
+    padding: 16px 18px;
+  }
+
+  .app {
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 22px;
+  }
+}
+
+/* Phones */
+@media (max-width: 640px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .header-stats {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .header-stats strong {
+    display: inline;
+    margin-right: 6px;
+    font-size: 1.05rem;
+  }
+
+  .logo {
+    font-size: 1.35rem;
+  }
+
+  .tagline {
+    font-size: 0.82rem;
+  }
+
+  /* Category chips become a horizontal scroller */
+  .chip-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .chip {
+    flex: 0 0 auto;
+  }
+
+  .filter-controls {
+    gap: 8px;
+  }
+
+  .filter-field {
+    flex: 1 1 45%;
+  }
+
+  .filter-field select {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .filter-controls .btn {
+    flex: 1 1 45%;
+  }
+
+  .card {
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+  }
+
+  .code-block {
+    font-size: 0.8rem;
+    padding: 12px;
+  }
+
+  .option {
+    padding: 11px 12px;
+    font-size: 0.9rem;
+  }
+
+  .card-nav {
+    gap: 8px;
+  }
+
+  .btn-nav {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .card-counter {
+    flex: 0 0 auto;
+    font-size: 0.82rem;
+  }
+
+  .card-actions .btn {
+    flex: 1 1 auto;
+  }
+
+  .site-footer {
+    display: none; /* keyboard hints are meaningless on touch screens */
+  }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .app {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .question-text {
+    font-size: 1rem;
+  }
+
+  .badge {
+    font-size: 0.66rem;
+  }
+}
+
+/* Dark mode follows the system preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1420;
+    --surface: #1a2130;
+    --surface-2: #232c3f;
+    --text: #e8ebf2;
+    --text-muted: #9aa4b8;
+    --accent: #818cf8;
+    --accent-strong: #a5b0ff;
+    --accent-soft: #272f52;
+    --correct: #4ade80;
+    --correct-soft: #15321f;
+    --wrong: #f87171;
+    --wrong-soft: #3a1d1d;
+    --warn: #fbbf24;
+    --warn-soft: #36290f;
+    --border: #303b52;
+    --code-bg: #0b0f1a;
+    --code-text: #dbe2ee;
+    --inline-code-bg: #2a3349;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .chip,
+  .option,
+  .progress-fill {
+    transition: none;
+  }
+}

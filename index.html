@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IntPrep — Junior Developer Interview Flashcards</title>
+  <meta name="description" content="200 flashcards for junior software engineer interviews: HTML, CSS, JavaScript, CS50 fundamentals, AI prompting and the most asked interview questions.">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/media-queries.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-title">
+        <h1 class="logo">Int<span>Prep</span></h1>
+        <p class="tagline">Junior software engineer interview flashcards &mdash; class of 2026</p>
+      </div>
+      <div class="header-stats" id="header-stats"></div>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="filters" aria-label="Question filters">
+      <div class="filter-row chip-row" id="category-chips"></div>
+      <div class="filter-row filter-controls">
+        <label class="filter-field">
+          <span>Difficulty</span>
+          <select id="difficulty-select">
+            <option value="all">All levels</option>
+            <option value="basic">Basic</option>
+            <option value="medium">Medium</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span>Type</span>
+          <select id="type-select">
+            <option value="all">All types</option>
+            <option value="mcq">Multiple choice</option>
+            <option value="open">Open question</option>
+            <option value="code">Code snippet</option>
+          </select>
+        </label>
+        <button type="button" class="btn btn-ghost" id="shuffle-btn" aria-pressed="false">Shuffle</button>
+        <button type="button" class="btn btn-ghost btn-danger" id="reset-btn">Reset progress</button>
+      </div>
+    </section>
+
+    <section class="card-area" id="card-area" aria-live="polite"></section>
+
+    <nav class="card-nav" aria-label="Card navigation">
+      <button type="button" class="btn btn-nav" id="prev-btn">&larr; Previous</button>
+      <div class="card-counter" id="card-counter"></div>
+      <button type="button" class="btn btn-nav" id="next-btn">Next &rarr;</button>
+    </nav>
+
+    <section class="progress-area" aria-label="Progress">
+      <div class="progress-bar" role="progressbar" aria-label="Deck progress">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-stats" id="progress-stats"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &middot; <kbd>S</kbd> show solution &middot; <kbd>A</kbd>&ndash;<kbd>D</kbd> answer multiple choice</p>
+  </footer>
+
+  <!-- Question banks (data) -->
+  <script src="js/data/html-questions.js"></script>
+  <script src="js/data/css-questions.js"></script>
+  <script src="js/data/js-basics-questions.js"></script>
+  <script src="js/data/js-advanced-questions.js"></script>
+  <script src="js/data/cs50-fundamentals-questions.js"></script>
+  <script src="js/data/cs50-algorithms-questions.js"></script>
+  <script src="js/data/ai-prompts-questions.js"></script>
+  <script src="js/data/interview-questions.js"></script>
+  <script src="js/data/index.js"></script>
+
+  <!-- App modules (one file per feature) -->
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/flashcards.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

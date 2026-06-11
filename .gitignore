@@ -1,0 +1,16 @@
+# Dependencies (if a package.json is ever added, e.g. for http-server)
+node_modules/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs and temp files
+*.log
+*.tmp
