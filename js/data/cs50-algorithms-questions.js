@@ -286,5 +286,287 @@ window.QUESTION_BANKS["cs50-algorithms"] = [
     },
     answer: "a",
     solution: "Correct answer: a. A Python dict is a hash table: each key is run through a hash function to find its slot, which is why keys must be hashable — immutable types like strings, numbers, and tuples qualify. That hashing is also exactly why dict (and set) lookups are O(1) on average.\n\nWhy the others are wrong:\n- b: keys are stored by hash, not sorted; lookup is average O(1), not O(log n). (Since Python 3.7 dicts do preserve insertion order, but that is ordering of iteration, not sorting, and it is not how lookups work.)\n- c: lists are mutable and therefore unhashable — using one as a key raises `TypeError: unhashable type: 'list'`, regardless of its contents. Use a tuple instead.\n- d: `in` on a dict uses the hash table, so it is average O(1); it is `in` on a LIST that scans linearly in O(n). Swapping a list for a dict or set to speed up membership checks is one of the most common practical optimizations in Python."
+  },
+  {
+    id: "csa-023",
+    category: "cs50",
+    difficulty: "basic",
+    type: "mcq",
+    question: "Which description matches **selection sort**?",
+    code: null,
+    options: {
+      a: "Repeatedly swap adjacent out-of-order pairs, bubbling large values to the end each pass",
+      b: "On each pass, scan the unsorted portion for its smallest element and swap it into the next position of the sorted portion",
+      c: "Take elements one at a time and slide each leftward into its correct spot among the already-sorted prefix",
+      d: "Split the array in half, sort each half recursively, and merge the sorted halves"
+    },
+    answer: "b",
+    solution: "Correct: b. Selection sort *selects* the minimum of what's left and puts it where it belongs: find the smallest of all n, swap into slot 0; find the smallest of the remaining n−1, swap into slot 1; repeat. After pass k, the first k slots are finally, permanently correct.\n\nThe other options are its classmates: a is **bubble sort**, c is **insertion sort**, d is **merge sort** — being able to tell the three quadratic sorts apart by their one-line summaries is exactly what this question tests.\n\nThe facts that distinguish selection sort in a follow-up:\n- Always Θ(n²) comparisons — even on sorted input, it must scan to *prove* each minimum (no early exit; bubble and insertion both have O(n) best cases on sorted data).\n- But only **O(n) swaps** — at most one per pass — historically relevant when writes were expensive.\n- Not stable in its usual form (the long-range swap can reorder equal elements).\n- In-place, O(1) extra memory.\n\nMnemonics: bubble = neighbors swap, values *bubble up*; selection = *select* the min, place it; insertion = like sorting cards in your hand, *insert* each new card into place. CS50's sorting lecture is built on exactly these three plus merge sort as the divide-and-conquer upgrade."
+  },
+  {
+    id: "csa-024",
+    category: "cs50",
+    difficulty: "medium",
+    type: "open",
+    question: "Walk me through merge sort. Why is it O(n log n), and what does it pay for that speed?",
+    code: null,
+    options: null,
+    answer: null,
+    solution: "Merge sort is divide-and-conquer in its purest form, and it's two ideas. **Divide**: split the array in half, recursively sort each half — the recursion bottoms out at single elements, which are sorted by definition. **Merge**: combine two *sorted* halves into one sorted whole by walking both with a finger on each front, repeatedly taking the smaller of the two front elements. Merging is the workhorse, and it's O(n) per level: each element gets looked at and placed once. Why O(n log n) overall: halving repeatedly produces **log₂ n levels** of recursion (1,000,000 elements → ~20 levels), and **every level merges n elements total** — so n work × log n levels = n log n. The intuition to say out loud: 'each level costs n; there are log n levels.' And the scale of the win: for a million elements, n² ≈ 10¹² operations versus n log n ≈ 2×10⁷ — fifty-thousand-fold, the difference between hours and milliseconds. What it pays: **O(n) extra memory** — merging needs a scratch array to merge into, unlike bubble/insertion/selection which shuffle in place. (In-place merge variants exist but are impractical.) The other properties worth knowing: it's **stable** (equal elements keep their order — take from the left half on ties), its O(n log n) is **guaranteed** — best, average, and worst case — with no adversarial input (quicksort's worst case is O(n²); merge sort has no bad days), and its sequential access pattern makes it the backbone of **external sorting** (data too big for RAM) and of real-world hybrids: Python's and Java's standard sort, Timsort, is a merge-sort descendant. Interview tip: draw the triangle — splits going down, merges coming back up — and label the two dimensions 'n per level' and 'log n levels'; that picture *is* the proof."
+  },
+  {
+    id: "csa-025",
+    category: "cs50",
+    difficulty: "medium",
+    type: "code",
+    question: "Fill in the two blanks to complete the merge step of merge sort in Python: merging two already-sorted lists into one sorted list.",
+    code: "def merge(left, right):\n    result = []\n    i, j = 0, 0\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            result.append(left[i])\n            ____\n        else:\n            result.append(right[j])\n            j += 1\n    # one of the two lists may have elements remaining\n    result.extend(left[i:])\n    result.extend(____)\n    return result",
+    options: null,
+    answer: null,
+    solution: "The blanks are `i += 1` and `right[j:]`:\n\nwhile i < len(left) and j < len(right):\n    if left[i] <= right[j]:\n        result.append(left[i])\n        i += 1\n    else:\n        result.append(right[j])\n        j += 1\nresult.extend(left[i:])\nresult.extend(right[j:])\n\nHow it works — the two-finger walk: `i` and `j` point at the current front of each list. Each iteration copies the *smaller* front into the result and advances only that finger. When one list runs out, the loop exits, and the tail of the other list — already sorted and all ≥ everything placed so far — is appended wholesale. (One of the two extends is always a no-op on an empty slice; writing both keeps the code branch-free.)\n\nDetails that show mastery:\n- Every element is examined and placed exactly once → the merge is **O(n)** — the fact the whole n log n analysis rests on.\n- The `<=` (not `<`) makes the sort **stable**: on ties, the left element goes first, preserving original order — the difference matters when sorting records by one field after another.\n- The leftover-tail step is the classic forgotten piece when people write this on a whiteboard; the slice idiom `left[i:]` handles it in one line.\n- Wrapped in the recursive shell — `if len(lst) <= 1: return lst` as base case, then `return merge(merge_sort(lst[:mid]), merge_sort(lst[mid:]))` — this is complete merge sort in ~15 lines, a fair whiteboard ask."
+  },
+  {
+    id: "csa-026",
+    category: "cs50",
+    difficulty: "medium",
+    type: "mcq",
+    question: "Which of these operations is O(log n)?",
+    code: null,
+    options: {
+      a: "Finding the largest value in an unsorted array",
+      b: "Searching a balanced binary search tree for a key",
+      c: "Looking up a key in a hash table with a good hash function",
+      d: "Printing every element of a linked list"
+    },
+    answer: "b",
+    solution: "Correct: b. In a *balanced* BST, every comparison at a node eliminates half the remaining tree — go left or go right — so reaching any key takes at most the tree's height, which balance keeps at O(log n). It's binary search expressed as a structure: a million nodes, ~20 steps.\n\nWhy the others have different complexities:\n- a: O(n) — in an *unsorted* array nothing lets you skip elements; you must look at all of them to be sure.\n- c: O(1) average — the hash function jumps straight to the right bucket with no comparisons against other keys at all. *Faster* than log n, which is exactly the hash table's selling point (and what it trades away: no ordering, no efficient range queries, no 'next largest' — the BST keeps those).\n- d: O(n) — visiting every node is linear by definition.\n\nThe pattern to internalize: **log n appears whenever each step discards a constant fraction (usually half) of the candidates** — binary search on a sorted array, balanced BST descent, and the per-level count in merge sort's recursion. The 'balanced' qualifier is load-bearing: insert sorted data naively into a BST and it degenerates into a linked list with O(n) search, which is why production trees self-balance (AVL, red-black — the structure under many ordered containers) and why CS50's BST lecture ends on exactly that cautionary note."
+  },
+  {
+    id: "csa-027",
+    category: "cs50",
+    difficulty: "advanced",
+    type: "open",
+    question: "Why can no comparison-based sorting algorithm beat O(n log n) in the worst case? And how do counting sort and friends seemingly break this law?",
+    code: null,
+    options: null,
+    answer: null,
+    solution: "The argument is information-theoretic and elegant enough to give in full. A comparison sort learns about its input *only* by asking yes/no questions ('is a[i] < a[j]?'). n distinct elements can arrive in **n! different orders**, and the algorithm must behave differently for every one of them — each permutation needs a different sequence of swaps to become sorted. A sequence of k yes/no answers can distinguish at most **2^k** different situations. So correctness demands 2^k ≥ n!, i.e. k ≥ log₂(n!), and by Stirling's approximation log₂(n!) ≈ n log₂ n − 1.44n = **Θ(n log n)**. No cleverness escapes this: it's a lower bound on the *problem* (for comparison-based algorithms), not on any particular algorithm — some input will always force ~n log n comparisons. That's why merge sort and heapsort, at O(n log n) worst case, are asymptotically *optimal* comparison sorts, and why no one will ever invent a general comparison sort that's fundamentally faster. The 'law-breakers' don't break it — they **refuse to play the comparison game**. Counting sort never compares elements: if keys are small integers in a known range k, it just tallies how many of each value exist (one array pass) and rewrites the array from the tallies — **O(n + k)**, genuinely linear when k is modest (sorting exam scores 0–100, bytes, ages). Radix sort extends the trick to bigger keys by counting-sorting digit by digit: O(d·(n + k)) for d-digit keys. Bucket sort assumes a known distribution. The trade: they exploit *structure in the keys* (bounded integers, fixed digits) and pay memory for counters, while comparison sorts work on anything with an ordering — strings, dates, custom objects. Interview tip: the chain 'n! orders, 2^k outcomes, so k ≥ log(n!) ≈ n log n' is four sentences and one of the few lower-bound proofs you can deliver entirely from memory — doing so is a strong-signal moment; then 'counting sort wins by not comparing' completes the picture."
+  },
+  {
+    id: "csa-028",
+    category: "cs50",
+    difficulty: "medium",
+    type: "code",
+    question: "What does `mystery(6)` print, and what well-known sequence is this? What goes wrong if you call `mystery(1)` — and `mystery(0)`?",
+    code: "def mystery(n):\n    if n <= 0:\n        return\n    print(n)\n    mystery(n - 2)\n    print(n)\n\nmystery(6)",
+    options: null,
+    answer: null,
+    solution: "Output of `mystery(6)`:\n\n6\n4\n2\n6 → wait, carefully: the prints AFTER the recursive call come back in reverse. Full trace:\n\nmystery(6): prints 6, calls mystery(4)\n  mystery(4): prints 4, calls mystery(2)\n    mystery(2): prints 2, calls mystery(0)\n      mystery(0): n <= 0, returns immediately\n    mystery(2) resumes: prints 2\n  mystery(4) resumes: prints 4\nmystery(6) resumes: prints 6\n\nSo the printed sequence is: **6 4 2 2 4 6** — descending on the way down, ascending on the way back up. A palindrome shape: the first prints happen *before* each recursive call (descent), the second prints happen *after*, in reverse order, as the call stack unwinds — each suspended frame resumes in LIFO order. This before/after-the-call distinction is the entire lesson: code after a recursive call runs in *unwinding* order, the trick behind printing a linked list backwards or reversing traversals without extra memory.\n\n`mystery(1)`: prints 1, calls mystery(−1), which hits `n <= 0` and returns, then prints 1 again → output `1 1`. Fine — *because* the base case is `n <= 0`, not `n == 0`.\n\n`mystery(0)`: hits the base case instantly, prints nothing. Also fine.\n\nThe design point: a base case of `n == 0` would have sent `mystery(1)` → `mystery(-1)` → `mystery(-3)` → ... infinitely (in practice: `RecursionError: maximum recursion depth exceeded`, Python's ~1000-frame limit). Writing base cases as inequalities (`<=`) instead of exact equality is cheap insurance against inputs that step over the exact value — a habit worth stating in any recursion interview."
+  },
+  {
+    id: "csa-029",
+    category: "cs50",
+    difficulty: "medium",
+    type: "mcq",
+    question: "What does it mean that an algorithm uses O(1) extra space versus O(n) extra space — and which pairing below is correct?",
+    code: null,
+    options: {
+      a: "Bubble sort uses O(1) extra space (it swaps in place); merge sort uses O(n) extra space (it needs a scratch array to merge into)",
+      b: "All sorting algorithms use O(n) extra space, since they store the array",
+      c: "Merge sort uses O(1) extra space because it splits the array instead of copying it",
+      d: "Space complexity counts CPU registers, so every algorithm is O(1)"
+    },
+    answer: "a",
+    solution: "Correct: a. Space complexity (in the usual 'auxiliary space' sense) counts the *extra* memory an algorithm needs beyond the input itself. Bubble, insertion, and selection sort rearrange elements with swaps inside the original array plus a few loop variables — O(1) auxiliary, called **in-place**. Merge sort's merge step needs somewhere to merge *into*: a scratch buffer proportional to the input — O(n) auxiliary. That's merge sort's tax for its guaranteed O(n log n) time, and the time/space trade-off in miniature.\n\nWhy the others are wrong: b — the input array isn't counted as 'extra'; c — splitting describes the recursion, but merging still requires the buffer (truly in-place merge sort is a known hard problem, not the standard algorithm); d — register count is fixed hardware, not what the analysis measures.\n\nCompleting the map of common cases: quicksort is in-place for data but uses O(log n) stack for recursion (average); **any recursive algorithm carries its maximum call-stack depth as space** — naive recursive Fibonacci is O(n) deep; hash-table-based tricks (like duplicate detection with a set) spend O(n) space to win time; and memoization is literally buying time with memory. Why anyone cares when RAM is cheap: embedded systems, sorting near-RAM-sized datasets (an O(n) scratch array means you can only sort half your memory), cache behavior, and interview follow-ups — 'what's the space complexity?' is the standard second question after you've nailed the time."
+  },
+  {
+    id: "csa-030",
+    category: "cs50",
+    difficulty: "medium",
+    type: "open",
+    question: "What is a greedy algorithm? Explain CS50's coin-change example, why greedy works for US coins — and a coin system where it fails.",
+    code: null,
+    options: null,
+    answer: null,
+    solution: "A greedy algorithm builds a solution step by step, always taking the **locally best-looking option** and never reconsidering. No backtracking, no look-ahead — which makes greedy algorithms fast and simple, and *sometimes wrong*. CS50's Cash problem: make change using the fewest coins. Greedy strategy: always take the largest coin that fits. For 67¢ with US coins (25, 10, 5, 1): two quarters (50), one dime (60), one nickel (65), two pennies — six coins, and provably optimal. Why greedy is *correct* for US-style coins: the denominations form what's called a **canonical system** — each coin is 'compatible' with the larger ones in a way that guarantees the big-coin choice never paints you into a corner (informally: 25 = 2×10+5, 10 = 2×5, 5 = 5×1; small coins compose into larger ones cleanly, so skipping a large coin never helps). Where it fails: coins **{1, 3, 4}** making 6 — greedy takes 4, then 1, then 1: three coins; optimal is 3+3: **two**. The locally best first move (grab the 4) was globally wrong. With such systems you need dynamic programming, which considers all options. The interview-grade summary: greedy is correct only when the problem has the *greedy-choice property* (a locally optimal choice is always extendable to a global optimum) — true for US change, Dijkstra's shortest paths (non-negative weights), Huffman coding, and interval scheduling by earliest end time; false for general change-making, 0/1 knapsack, and most scheduling variants. Practical heuristic: greedy is the first thing to *try* and the first thing to *distrust* — verify with small counterexample hunting before believing it. Interview tip: the {1,3,4}→6 counterexample is eleven words and instantly proves you understand the limits, not just the recipe."
+  },
+  {
+    id: "csa-031",
+    category: "cs50",
+    difficulty: "basic",
+    type: "code",
+    question: "Fill in the two blanks to complete CS50's greedy change-making in Python: count the fewest coins (25, 10, 5, 1) for a given number of cents.",
+    code: "def coins_needed(cents):\n    count = 0\n    for coin in [25, 10, 5, 1]:\n        count += cents ____ coin   # how many of this coin fit?\n        cents = cents ____ coin    # what remains afterwards?\n    return count\n\nprint(coins_needed(67))  # should print 6",
+    options: null,
+    answer: null,
+    solution: "The blanks are `//` (floor division) and `%` (modulo):\n\nfor coin in [25, 10, 5, 1]:\n    count += cents // coin   # how many whole coins of this size fit\n    cents = cents % coin     # the remainder still owed\n\nTrace for 67: quarters — 67//25 = 2 coins, 67%25 = 17 left; dimes — 17//10 = 1, 7 left; nickels — 7//5 = 1, 2 left; pennies — 2//1 = 2, 0 left. Total **6**.\n\nThe div/mod pair is the idiom to internalize: **`//` answers 'how many whole times does it fit', `%` answers 'what's left over'** — together they decompose a quantity, which is the same trick behind extracting digits (n%10 is the last digit, n//10 drops it), converting seconds to h:m:s, base conversion, and 2D-grid index math (row = i//width, col = i%width). In C the same code is `/` (integer division happens automatically with ints) and `%`.\n\nTwo notes that show care: iterating the list **largest first** is what makes it greedy — and the order is load-bearing (smallest first would count all pennies); and the loop is cleaner than CS50's four repeated while-loops, but identical in behavior. Connect it back: greedy is optimal *for this coin system*; with denominations like {1, 3, 4} this same code returns a wrong (non-minimal) answer for 6 — the algorithm's correctness lives in the input's structure, not the code."
+  },
+  {
+    id: "csa-032",
+    category: "cs50",
+    difficulty: "medium",
+    type: "mcq",
+    question: "Given a table `shows (title, year, genre)`, what does this query return?\n\n```\nSELECT genre, COUNT(*) AS n\nFROM shows\nWHERE year >= 2020\nGROUP BY genre\nHAVING COUNT(*) >= 10\nORDER BY n DESC;\n```",
+    code: null,
+    options: {
+      a: "Every show from 2020 on, with a running count next to each row",
+      b: "One row per genre — counting only shows from 2020 onward — keeping just the genres with at least 10 such shows, sorted most-numerous first",
+      c: "It fails: you cannot use WHERE and HAVING in the same query",
+      d: "One row per genre counting all shows ever, because WHERE is ignored when GROUP BY is present"
+    },
+    answer: "b",
+    solution: "Correct: b. Reading it in execution order (which is *not* the writing order): **FROM** shows → **WHERE** filters individual rows first (only year ≥ 2020 survive) → **GROUP BY** collapses the survivors into one bucket per genre → **COUNT(*)** computes per bucket → **HAVING** filters the *buckets* (only genres with ≥ 10 recent shows remain) → **SELECT** picks the output columns → **ORDER BY** sorts the final rows by count, descending.\n\nThe distinction this question exists to test: **WHERE filters rows before grouping; HAVING filters groups after aggregation**. That's why `WHERE COUNT(*) >= 10` is an error (no groups exist yet when WHERE runs) and why pushing conditions into WHERE when possible is both correct and faster — fewer rows reach the grouping stage.\n\nWhy the others are wrong: a — GROUP BY collapses rows; you get one row per genre, not per show; c — WHERE + HAVING together is the standard, intended pattern; d — WHERE is very much applied, before grouping.\n\nSupporting cast worth knowing: the other aggregates (`SUM`, `AVG`, `MIN`, `MAX`); `COUNT(*)` counts rows while `COUNT(col)` skips NULLs; every selected column must be either grouped-by or aggregated (SQLite is lax about this, real databases are not); and `AS n` aliases the aggregate so ORDER BY can reference it readably."
+  },
+  {
+    id: "csa-033",
+    category: "cs50",
+    difficulty: "basic",
+    type: "open",
+    question: "What are primary keys and foreign keys in a relational database? Use CS50's `students` / `houses` example and explain what a JOIN has to do with them.",
+    code: null,
+    options: null,
+    answer: null,
+    solution: "A **primary key** is a column (or combination) that uniquely identifies each row in its table — no duplicates, no NULLs. Typically an auto-incrementing integer `id`: `houses(id, name)` where id 1 = Gryffindor. A **foreign key** is a column in one table that *refers to* a primary key in another: `students(id, name, house_id)` — each student's `house_id` holds the id of their house. The foreign key is how relational databases express relationships: instead of writing \"Gryffindor\" into every student row, you store the number 1 and keep the house's details in exactly one place. The payoffs: **no duplication** (the house name exists once — rename it with a one-row update, not a million-row sweep), **no inconsistency** (no rows saying \"Gryfindor\" with a typo), smaller storage, and — with the constraint declared (`FOREIGN KEY (house_id) REFERENCES houses(id)`) — **referential integrity**: the database refuses a `house_id` pointing at a house that doesn't exist, and can cascade or block deletes of a house that still has students. This whole discipline of splitting data into related tables is **normalization**. The **JOIN** is the read-side counterpart: it stitches the split data back together by matching foreign key to primary key — `SELECT students.name, houses.name FROM students JOIN houses ON students.house_id = houses.id` walks each student row to its house row. One-to-many (a house has many students) needs just the foreign key; many-to-many (students ↔ courses) needs a third *junction table* (`enrollments(student_id, course_id)`) holding two foreign keys. Interview tip: 'primary key = identity, foreign key = reference to another table's identity, JOIN = follow the reference' — then say 'normalization means update one row, not a million' as the why."
+  },
+  {
+    id: "csa-034",
+    category: "cs50",
+    difficulty: "medium",
+    type: "code",
+    question: "Fill in the three blanks: list each genre alongside how many shows it has, but only counting shows rated 8.0 or higher, with the most popular genre first.\n\nTables: `shows (id, title, genre)` and `ratings (show_id, rating)`.",
+    code: "SELECT shows.genre, COUNT(*) AS n\nFROM shows\n____ ratings ON shows.id = ratings.____\nWHERE ratings.rating >= 8.0\nGROUP BY shows.____\nORDER BY n DESC;",
+    options: null,
+    answer: null,
+    solution: "The blanks are `JOIN`, `show_id`, and `genre`:\n\nSELECT shows.genre, COUNT(*) AS n\nFROM shows\nJOIN ratings ON shows.id = ratings.show_id\nWHERE ratings.rating >= 8.0\nGROUP BY shows.genre\nORDER BY n DESC;\n\nPiece by piece:\n- **JOIN ... ON** pairs each show with its rating rows by matching the primary key (`shows.id`) to the foreign key (`ratings.show_id`) — the standard key-to-key stitch. (Plain `JOIN` is INNER: shows with no rating rows vanish from the result; if unrated shows should appear with a count of 0, that's `LEFT JOIN` plus `COUNT(ratings.show_id)` — the NULL-skipping count — a classic follow-up.)\n- **WHERE** trims the joined rows to ratings ≥ 8.0 *before* any grouping.\n- **GROUP BY shows.genre** collapses to one row per genre; `COUNT(*)` sizes each group.\n- **ORDER BY n DESC** sorts by the aliased aggregate, biggest first. (Add `LIMIT 5` for a top-5 — LIMIT is the final step of the pipeline.)\n\nThe mental model worth stating in interviews: a query is a pipeline — *join → filter rows → group → aggregate → filter groups (HAVING) → sort → limit* — and each clause has exactly one job in it. Most SQL confusion (why can't WHERE see the count? why did unrated shows disappear?) dissolves once you place the clauses on that pipeline."
+  },
+  {
+    id: "csa-035",
+    category: "cs50",
+    difficulty: "basic",
+    type: "mcq",
+    question: "In Python, what is the key difference between a list and a tuple?",
+    code: null,
+    options: {
+      a: "Lists are mutable and tuples are immutable — so tuples can serve as dict keys and set members, while lists cannot",
+      b: "Tuples can hold mixed types; lists must be homogeneous",
+      c: "Lists preserve insertion order; tuples are unordered like sets",
+      d: "Tuples are just lists that cannot exceed two elements"
+    },
+    answer: "a",
+    solution: "Correct: a. **Mutability is the entire difference.** A list can be changed after creation — `append`, `remove`, `lst[0] = x`, `sort()` — while a tuple is frozen at birth: `t[0] = 5` raises `TypeError`. Everything else follows from that one fact:\n- **Hashability**: dict keys and set members must be hashable, which requires immutability. `locations[(40.7, -74.0)] = \"NYC\"` works with a tuple key; a list key raises `TypeError: unhashable type`. (Caveat for honesty points: a tuple *containing* a list is unhashable — immutability must go all the way down.)\n- **Intent**: a tuple says 'fixed-shape record' — an (x, y) point, an (r, g, b) color, a row from a CSV or database; a list says 'collection that grows and shrinks'. Python returns tuples for multiple values (`return name, age`), and unpacking (`name, age = person`) plus swap (`a, b = b, a`) are tuple syntax.\n- Minor perks: tuples are slightly smaller and cheaper, and immutability prevents accidental aliasing mutations.\n\nWhy the others are wrong: b — both hold mixed types freely; c — *both* preserve order (unordered is sets and pre-3.7 dicts); d — tuples can be any length, including one (`(5,)` — the comma, not the parens, makes the tuple; `(5)` is just the number 5 in parentheses, a real gotcha).\n\nRule of thumb to close with: heterogeneous fixed structure → tuple; homogeneous variable-length sequence → list."
+  },
+  {
+    id: "csa-036",
+    category: "cs50",
+    difficulty: "medium",
+    type: "open",
+    question: "What are list comprehensions in Python? Translate a filter-and-transform loop into one, and say when you'd refuse to use a comprehension.",
+    code: null,
+    options: null,
+    answer: null,
+    solution: "A list comprehension builds a list from an iterable in a single expression: `[expression for item in iterable if condition]` — transform on the left, source in the middle, filter on the right. The translation this question wants:\n\nsquares = []\nfor n in numbers:\n    if n % 2 == 0:\n        squares.append(n * n)\n\nbecomes\n\nsquares = [n * n for n in numbers if n % 2 == 0]\n\nSame behavior, one line, and arguably *more* readable once your eye learns the shape — 'squares of the even numbers' reads almost like the sentence. The family: **dict comprehensions** `{u.id: u.name for u in users}`, **set comprehensions** `{w.lower() for w in words}`, and **generator expressions** — the same syntax in parentheses, `sum(n*n for n in numbers)` — which produce values lazily without materializing a list (the right choice when feeding an aggregator or streaming something large). When to refuse: (1) **side effects** — a comprehension whose expression calls `print()` or mutates state abuses the construct; comprehensions are for *building values*, loops are for *doing things*; (2) **complexity** — nested comprehensions with multiple `for`s and `if`s (`[x for row in grid for x in row if ...]` is the readable limit; beyond that, an explicit loop with named intermediates wins); (3) when you need `break`/early exit or exception handling per item. Performance footnote: comprehensions are modestly faster than append-loops (the append lookup is gone), but readability, not speed, is the reason to use them. Interview tip: write the before/after pair above and volunteer the 'no side effects, no triple nesting' refusal rule — knowing a tool's limits reads as more senior than knowing its syntax."
+  },
+  {
+    id: "csa-037",
+    category: "cs50",
+    difficulty: "advanced",
+    type: "code",
+    question: "This Python function has one of the language's most famous traps. Predict the three printed results and explain what's going on.",
+    code: "def add_item(item, items=[]):\n    items.append(item)\n    return items\n\nprint(add_item(\"a\"))\nprint(add_item(\"b\"))\nprint(add_item(\"c\", []))",
+    options: null,
+    answer: null,
+    solution: "Output:\n\n['a']\n['a', 'b']     ← the trap\n['c']\n\nThe mutable default argument problem: **default values are evaluated once, at function *definition* time — not per call.** That single `[]` becomes part of the function object itself, and every call that omits `items` shares *the same list*. Call 1 appends \"a\" to it; call 2 appends \"b\" to the *same* list, so \"a\" is still there. Call 3 passes its own fresh list, so the shared default isn't touched (and the shared one still holds ['a', 'b'] for any future default call). You can even see the state: `add_item.__defaults__` shows the accumulating list.\n\nThe idiomatic fix — use a sentinel and create the list inside the body, which *does* run per call:\n\ndef add_item(item, items=None):\n    if items is None:\n        items = []\n    items.append(item)\n    return items\n\nWhy the language works this way: `def` is an executable statement; the defaults are computed when it executes, once. Immutable defaults (`0`, `\"\"`, `None`, tuples) are safe — sharing them is harmless because they can't be mutated, which is why the rule of thumb is **never use a mutable value (list, dict, set) as a default**. Linters flag it (`B006`), and the same once-evaluated logic occasionally surprises in the other direction: a default of `time.time()` is frozen at import time. Interview tip: this is a top-three Python gotcha question; the words that show understanding are 'defaults evaluate at definition time and live on the function object' — followed immediately by the `None` sentinel fix."
+  },
+  {
+    id: "csa-038",
+    category: "cs50",
+    difficulty: "basic",
+    type: "mcq",
+    question: "What does it mean for a sorting algorithm to be *stable*, and when does it matter?",
+    code: null,
+    options: {
+      a: "It never crashes, even on empty input",
+      b: "Elements that compare as equal keep their original relative order — which matters when you sort by one field after another, e.g. sorting by grade keeps each grade's students in the previous alphabetical order",
+      c: "Its running time is the same on every input",
+      d: "It uses O(1) extra memory"
+    },
+    answer: "b",
+    solution: "Correct: b. Stability is about ties: if two records compare equal under the sort key, a stable sort leaves them in the order they arrived. The canonical scenario: sort students alphabetically, *then* stable-sort by grade — within each grade, students remain alphabetical. You've effectively sorted by (grade, name) using two simple passes (the multi-key trick: sort by the *secondary* key first, then stable-sort by the primary). With an unstable sort, the second pass scrambles each grade's internal order and the alphabetical work is destroyed.\n\nWhere it shows up: spreadsheet column sorting (users expect clicking 'sort by date' to preserve the existing order among equal dates), paginated leaderboard ties, and any UI where re-sorting shouldn't shuffle equal items unpredictably.\n\nThe scorecard worth memorizing: **stable** — merge sort, insertion sort, bubble sort, counting sort (implemented right), and Python's built-in `sorted()`/Timsort (stability is *guaranteed* by the language docs — the practical fact this question usually leads to). **Not stable** (as commonly implemented) — quicksort, heapsort, selection sort. Any algorithm can be *made* stable by decorating elements with their original index as a tiebreaker, at O(n) extra space.\n\nWhy the others are wrong: a is robustness, c is about complexity variance (and describes selection sort's always-Θ(n²), which is unstable anyway), d is the definition of in-place — all real properties, none of them stability."
+  },
+  {
+    id: "csa-039",
+    category: "cs50",
+    difficulty: "medium",
+    type: "code",
+    question: "Predict the output of each of the five `print` calls — Python sequence indexing and slicing.",
+    code: "word = \"algorithms\"\nnums = [10, 20, 30, 40, 50]\n\nprint(word[0], word[-1])\nprint(word[2:6])\nprint(nums[:2])\nprint(nums[::2])\nprint(nums[::-1])",
+    options: null,
+    answer: null,
+    solution: "Output:\n\na s\ngori\n[10, 20]\n[10, 30, 50]\n[50, 40, 30, 20, 10]\n\nThe rules at work:\n- `word[0]` is \"a\"; **negative indices count from the end** — `word[-1]` is the last character \"s\", `[-2]` second-to-last, etc. No more `word[len(word) - 1]`.\n- `word[2:6]` — slices are **start-inclusive, stop-exclusive**: indices 2, 3, 4, 5 → \"gori\". The half-open convention means `word[:k] + word[k:]` reassembles perfectly and the slice length is simply stop − start.\n- `nums[:2]` — omitted start defaults to 0: first two elements. Likewise `nums[2:]` is 'from index 2 on' and `nums[:]` copies the whole list (a real idiom: shallow copy).\n- `nums[::2]` — the third number is the **step**: every second element, indices 0, 2, 4.\n- `nums[::-1]` — step −1 walks backwards: a reversed *copy*, the famous reversal one-liner (works on strings too: `word[::-1]` is \"smhtirogla\").\n\nThree footnotes that earn credit: slicing never raises IndexError — out-of-range slices just truncate (`nums[3:99]` is `[40, 50]`), unlike direct indexing (`nums[99]` raises); slices return *new* objects, so mutating a slice copy doesn't touch the original; and the same syntax powers deletion (`del nums[1:3]`) and replacement on lists. Strings being immutable, every string slice is necessarily a new string."
+  },
+  {
+    id: "csa-040",
+    category: "cs50",
+    difficulty: "medium",
+    type: "mcq",
+    question: "Breadth-first search (BFS) versus depth-first search (DFS) on a graph: which statement is correct?",
+    code: null,
+    options: {
+      a: "BFS explores level by level using a queue and finds shortest paths in unweighted graphs; DFS dives down one path using a stack (or recursion) and backtracks",
+      b: "BFS uses a stack and DFS uses a queue",
+      c: "DFS always finds the shortest path between two nodes",
+      d: "BFS only works on trees, never on graphs with cycles"
+    },
+    answer: "a",
+    solution: "Correct: a. The two traversals differ in exactly one design choice — the data structure holding the frontier — and everything else follows. **BFS** uses a **queue** (FIFO): start node, then all its neighbors, then *their* neighbors — expanding in rings, level by level. Because it reaches every node via the fewest possible edges, BFS finds **shortest paths in unweighted graphs** — its defining superpower (degrees of separation, fewest moves in a puzzle, shortest subway route by stops; CS50's 'Six Degrees of Kevin Bacon' problem is BFS verbatim). **DFS** uses a **stack** — explicitly, or implicitly via recursion — diving along one path as deep as it goes, then backtracking. It's the natural shape for exhaustive exploration: maze solving, cycle detection, topological sorting, connected components, and anything phrased as 'try this path fully before trying another' (backtracking puzzles like Sudoku).\n\nWhy the others are wrong: b — exactly backwards, and the swap *is* the difference; c — DFS can wander arbitrarily far before stumbling onto the target (no shortest-path guarantee); d — both handle cycles fine *provided you track visited nodes* — the visited set is what prevents infinite loops, and forgetting it is the classic implementation bug.\n\nShared facts: both run O(V + E), visiting each vertex and edge once. Memory differs by graph shape: BFS holds a whole level (wide graphs hurt); DFS holds one path (deep graphs hurt — and recursion depth limits apply). For *weighted* shortest paths, neither suffices — that's Dijkstra, which is BFS upgraded with a priority queue. 'Queue = level by level = shortest hops; stack = deep dive = backtracking' is the whole answer in one breath."
+  },
+  {
+    id: "csa-041",
+    category: "cs50",
+    difficulty: "medium",
+    type: "open",
+    question: "Design question: how would you check whether an array of n numbers contains any duplicates? Give more than one approach and compare their time and space complexity.",
+    code: null,
+    options: null,
+    answer: null,
+    solution: "This is the classic time/space trade-off question, and strong answers present a menu. **(1) Brute force**: compare every pair — two nested loops. O(n²) time, O(1) space. Correct, trivial to write, and unusable at scale (a million elements → ~half a trillion comparisons). **(2) Sort first**: after sorting, any duplicates are *adjacent* — sort, then one linear scan comparing neighbors. O(n log n) time, and space depends on the sort (in-place sort → O(1) extra, but it mutates the input; sorting a copy costs O(n)). Great when you're allowed to reorder, when memory is tight, or when the data is *already* sorted (then it's just the O(n) scan). **(3) Hash set**: walk the array, checking 'have I seen this?' before inserting — `seen.has(x)` / `x in seen`. O(n) average time, O(n) space. The default right answer in practice: one pass, early exit on the first duplicate found. In Python the idiomatic whole-array check is `len(set(arr)) != len(arr)`; the loop version wins when duplicates are likely early. **(4) Special-structure bonus**: if values are known integers in a small range 0..k, a boolean array of size k beats hashing (no hash overhead); and the cute pigeonhole observation — n+1 values in range 1..n *must* contain a duplicate before you even look. The comparison table to say out loud: n² / 1, n log n / 1 (mutates), n / n — then pick by constraints: 'memory-rich and want speed → hash set; can't allocate or can't hash → sort; tiny n → whatever's simplest.' Interview tip: this question is rarely about the answer — it's about whether you *volunteer* multiple approaches with their costs and choose by constraint. Name all three before being asked, and mention early-exit; that's the senior-shaped behavior being screened for."
+  },
+  {
+    id: "csa-042",
+    category: "cs50",
+    difficulty: "basic",
+    type: "code",
+    question: "Fill in the two blanks to count word frequencies in Python — the `.get` idiom for 'increment, defaulting to zero the first time'.",
+    code: "text = \"the quick brown fox jumps over the lazy dog the end\"\n\ncounts = {}\nfor word in text.____():\n    counts[word] = counts.____(word, 0) + 1\n\nprint(counts[\"the\"])  # should print 3",
+    options: null,
+    answer: null,
+    solution: "The blanks are `split` and `get`:\n\ncounts = {}\nfor word in text.split():\n    counts[word] = counts.get(word, 0) + 1\n\nHow it works:\n- `text.split()` with no arguments splits on *any run of whitespace* (spaces, tabs, newlines) and drops empties — more robust than `split(\" \")` for real text.\n- `counts.get(word, 0)` returns the current count **or 0 if the word isn't a key yet** — neatly dodging the `KeyError` that `counts[word] + 1` would raise on first sight of a word. One line replaces the clunky `if word in counts: ... else: ...` dance.\n\nThis counting pattern is everywhere: word frequencies, vote tallies, histogram building, grouping by category — and it's a hash-table showcase: each of the n words costs an O(1) average lookup+store, so the whole count is O(n). (The C-and-CS50 contrast worth drawing: doing this without a dict means sorting first or nested scanning — the dict is what makes it a three-liner.)\n\nThe standard-library escalator, for bonus points:\n\nfrom collections import Counter\ncounts = Counter(text.split())\ncounts.most_common(3)   # top 3 words with counts\n\n`Counter` is the purpose-built tool — missing keys count as 0 automatically, and `most_common` answers the usual follow-up question for free. `collections.defaultdict(int)` is the middle option (`counts[word] += 1` just works). Knowing all three rungs — get-idiom, defaultdict, Counter — and *when each is overkill* is exactly the fluency this exercise checks."
+  },
+  {
+    id: "csa-043",
+    category: "cs50",
+    difficulty: "advanced",
+    type: "mcq",
+    question: "Two users click 'buy' on the last item in stock at the same moment. Both requests read `stock = 1`, both decide the purchase is valid, both write `stock = 0` — and the store has sold two units. In database terms, what is this and what is the fix?",
+    code: null,
+    options: {
+      a: "A SQL injection attack; the fix is prepared statements",
+      b: "A race condition on a read-then-write sequence; the fix is making the check-and-update atomic — a transaction with appropriate locking, or a single conditional UPDATE",
+      c: "A foreign-key violation; the fix is adding ON DELETE CASCADE",
+      d: "Normal behavior that databases cannot prevent"
+    },
+    answer: "b",
+    solution: "Correct: b. This is a textbook **race condition**: two interleaved read-then-write sequences, where each decision was based on a value that was stale by the time of the write. CS50 teaches it with twin examples — this one and the 'two roommates both check the fridge, both buy milk' story. The window between *checking* and *acting* is the vulnerability.\n\nThe fix is **atomicity** — make check-and-update one indivisible step:\n\n-- Option 1: push the check into the write itself\nUPDATE products SET stock = stock - 1\nWHERE id = ? AND stock > 0;\n-- then check 'rows affected': 1 = sale, 0 = sold out\n\n-- Option 2: a transaction with locking\nBEGIN TRANSACTION;\nSELECT stock FROM products WHERE id = ? FOR UPDATE;  -- locks the row\n-- decide, then UPDATE\nCOMMIT;\n\nThe single conditional UPDATE is the elegant version: the database applies the WHERE check and the write atomically, so two concurrent attempts serialize — one succeeds, one matches zero rows. Transactions generalize it: BEGIN...COMMIT makes a *group* of statements all-or-nothing (the A in **ACID**), and row locks (`FOR UPDATE`) prevent concurrent readers from acting on doomed data. The same hazard appears in code as 'check-then-act' bugs (`if file doesn't exist → create it`) — the lesson transfers beyond SQL.\n\nWhy the others are wrong: a — injection is about untrusted input in queries, absent here; c — no foreign keys involved; d — preventing exactly this is a core reason transactional databases exist."
+  },
+  {
+    id: "csa-044",
+    category: "cs50",
+    difficulty: "medium",
+    type: "open",
+    question: "Memoization versus bottom-up tabulation in dynamic programming: using Fibonacci or climbing-stairs as your example, explain both, and when each is preferable.",
+    code: null,
+    options: null,
+    answer: null,
+    solution: "Both are dynamic programming — solving a problem whose recursion recomputes the same subproblems exponentially many times, by ensuring **each subproblem is solved once**. They differ only in direction. **Memoization (top-down)**: keep the natural recursive shape, add a cache. `fib(n)` checks the cache first; on a miss it recurses, then stores the result. The first `fib(50)` call tree collapses from 2⁵⁰-ish calls to 50 distinct ones — O(n) time, O(n) space for cache plus recursion stack. In Python it's literally one decorator: `@functools.lru_cache` above the naive function. **Tabulation (bottom-up)**: eliminate recursion; fill a table from the base cases upward — `dp[0], dp[1]`, then `dp[i] = dp[i-1] + dp[i-2]` in a loop until `dp[n]`. Same O(n) time, but no recursion stack — and it unlocks the **space squeeze**: computing `dp[i]` needs only the previous two values, so two variables suffice — O(1) space, the optimal Fibonacci. When to prefer which: *memoization* wins when the recursive structure is complex or you only need a sparse subset of subproblems (it computes exactly what's demanded, nothing more), and it's the five-minute transformation of code you already have — but it carries recursion-depth limits (Python's ~1000 frames make memoized fib(5000) crash where tabulation shrugs) and per-call overhead. *Tabulation* wins for performance (loops beat function calls), for deep problems, and whenever the evaluation order is easy to see — and it's the form that admits rolling-array space optimizations. The general DP recipe to recite: identify overlapping subproblems and optimal substructure → define the state (`dp[i]` = answer for size i) → write the recurrence → pick top-down or bottom-up → optimize space if only recent states are needed. Interview tip: implement memoized first (fast to write, hard to get wrong), then *offer* the bottom-up O(1)-space version — that sequence demonstrates both fluency and judgment."
   }
 ];
