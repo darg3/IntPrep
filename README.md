@@ -1,6 +1,6 @@
 # IntPrep — Junior Developer Interview Flashcards
 
-A vanilla HTML/CSS/JavaScript web app (works on desktop and mobile) with ~200 flashcards to prepare for junior software engineer interviews in 2026.
+A vanilla HTML/CSS/JavaScript web app (works on desktop and mobile) with ~600 flashcards to prepare for junior software engineer interviews in 2026.
 
 ## Run it
 
