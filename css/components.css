@@ -1,5 +1,16 @@
 /* components.css — chips, buttons, card, options, solution panel, badges, progress */
 
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* --- Buttons --- */
 
 .btn {
@@ -89,7 +100,8 @@
 
 /* --- Selects --- */
 
-.filter-field select {
+.filter-field select,
+.filter-field input[type="search"] {
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: var(--radius-sm);
@@ -108,6 +120,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+  animation: cardFadeIn 0.25s ease;
 }
 
 .card-meta {
@@ -270,10 +283,15 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 2000px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
 }
 
 .solution.is-hidden {
-  display: none;
+  max-height: 0;
+  opacity: 0;
 }
 
 .solution-label {
@@ -375,4 +393,62 @@
   color: var(--text-muted);
   font-weight: 500;
   margin-left: 8px;
+}
+
+/* --- Syntax highlighting --- */
+
+.tok-keyword {
+  color: #c792ea;
+}
+
+.tok-string {
+  color: #c3e88d;
+}
+
+.tok-comment {
+  color: #546e7a;
+  font-style: italic;
+}
+
+.tok-number {
+  color: #f78c6c;
+}
+
+/* --- End of deck screen --- */
+
+.deck-complete {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 36px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: cardFadeIn 0.25s ease;
+}
+
+.deck-complete h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.deck-complete .deck-stat {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.deck-complete .deck-stat .value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  display: block;
+}
+
+.deck-complete .deck-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
 }

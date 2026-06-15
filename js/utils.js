@@ -33,5 +33,35 @@ var Utils = {
 
   capitalize: function (str) {
     return str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
+  },
+
+  /* Syntax highlighting: escapes HTML, then wraps tokens in spans. */
+  highlightCode: function (code) {
+    var escaped = Utils.escapeHtml(code);
+    var keywords = ["const", "let", "var", "function", "return", "if", "else", "for", "while", "class", "new", "this", "null", "undefined", "true", "false", "int", "char", "void", "struct", "typedef"];
+    var regex;
+
+    escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, function (m) {
+      return '<span class="tok-comment">' + m + "</span>";
+    });
+
+    escaped = escaped.replace(/\/\/.*?(?=\n|$)/g, function (m) {
+      return '<span class="tok-comment">' + m + "</span>";
+    });
+
+    escaped = escaped.replace(/("(?:\\.|[^"])*"|'(?:\\.|[^'])*')/g, function (m) {
+      return '<span class="tok-string">' + m + "</span>";
+    });
+
+    escaped = escaped.replace(/\b(\d+(?:\.\d+)?)\b/g, function (m) {
+      return '<span class="tok-number">' + m + "</span>";
+    });
+
+    for (var i = 0; i < keywords.length; i++) {
+      regex = new RegExp("\\b" + keywords[i] + "\\b", "g");
+      escaped = escaped.replace(regex, '<span class="tok-keyword">' + keywords[i] + "</span>");
+    }
+
+    return escaped;
   }
 };

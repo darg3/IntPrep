@@ -48,6 +48,19 @@
             <option value="code">Code snippet</option>
           </select>
         </label>
+        <label class="filter-field">
+          <span>Status</span>
+          <select id="status-select">
+            <option value="all">All cards</option>
+            <option value="unseen">Unseen</option>
+            <option value="weak">Wrong / Review</option>
+            <option value="mastered">Mastered</option>
+          </select>
+        </label>
+        <label class="filter-field filter-field--search">
+          <span>Search</span>
+          <input type="search" id="search-input" placeholder="keyword…" autocomplete="off">
+        </label>
         <button type="button" class="btn btn-ghost" id="shuffle-btn" aria-pressed="false">Shuffle</button>
         <button type="button" class="btn btn-ghost btn-danger" id="reset-btn">Reset progress</button>
       </div>
