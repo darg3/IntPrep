@@ -1,5 +1,34 @@
 /* media-queries.css — ALL responsive and media-dependent rules live in this file only */
 
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase tap target sizes for touch */
+  .btn {
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+
+  .chip {
+    min-height: 40px;
+  }
+
+  .option {
+    min-height: 44px;
+  }
+
+  .filter-field select,
+  .filter-field input[type="search"] {
+    min-height: 44px;
+  }
+
+  /* Remove hover effects on touch */
+  .btn:hover,
+  .chip:hover,
+  .option:hover {
+    background-color: inherit;
+  }
+}
+
 /* Tablets and small laptops */
 @media (max-width: 860px) {
   .header-inner {
@@ -194,5 +223,29 @@
   .deck-complete {
     animation: none;
     transition: none;
+  }
+}
+
+/* Safe area support for devices with notches/rounded corners */
+@media (max-width: 640px) {
+  .site-header {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: 12px;
+  }
+
+  .site-footer {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .app {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+}
+
+/* Smooth scrolling for better mobile UX */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
   }
 }

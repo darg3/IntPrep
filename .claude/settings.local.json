@@ -28,7 +28,9 @@
       "PowerShell(Start-Process \"http://localhost:8000\")",
       "Bash(curl -s \"http://localhost:8000/\")",
       "PowerShell(node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\utils.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\state.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\filters.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\flashcards.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\app.js\" ; \"All JS files have valid syntax\")",
-      "PowerShell(node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\utils.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\state.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\filters.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\flashcards.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\app.js\" ; \"All JS files have valid syntax ✓\")"
+      "PowerShell(node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\utils.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\state.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\filters.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\flashcards.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\app.js\" ; \"All JS files have valid syntax ✓\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

@@ -1,19 +1,56 @@
-# Dependencies (if a package.json is ever added, e.g. for http-server)
+# Dependencies
 node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build and dist files
+dist/
+build/
+*.bundle.js
+*.min.js
+*.min.css
 
 # OS files
 Thumbs.db
 Desktop.ini
 .DS_Store
+.Spotlight-V100
+.Trashes
 
 # Editor/IDE
 .vscode/
 .idea/
+.vs/
 *.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+.project
+.classpath
+.c9/
+*.tern-port
+
+# Environment files
+.env
+.env.local
+.env.*.local
 
 # Logs and temp files
 *.log
 *.tmp
+*.pid
+*.seed
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-specific
+._*
+.AppleDouble
+.LSOverride
+ehthumbs.db
 
 # Claude Code local settings (machine-specific)
 .claude/settings.local.json

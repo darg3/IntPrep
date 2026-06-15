@@ -1,16 +1,30 @@
 # IntPrep — Junior Developer Interview Flashcards
 
-A vanilla HTML/CSS/JavaScript web app (works on desktop and mobile) with ~600 flashcards to prepare for junior software engineer interviews in 2026.
+A vanilla HTML/CSS/JavaScript web app with ~600 flashcards to prepare for junior software engineer interviews. Optimized for desktop, tablet, and mobile with a responsive design, dark mode, and persistent progress tracking.
 
-## Run it
+## Quick Start
 
-No build step and no server needed — open `index.html` in any browser.
-
-Optionally serve it (nicer on mobile via your LAN):
-
+### Option 1: Open locally (instant, no server needed)
+```bash
+# Open index.html in your browser
+# On macOS: open index.html
+# On Windows: start index.html
+# On Linux: xdg-open index.html
 ```
+
+### Option 2: Serve locally (recommended for mobile testing)
+```bash
+# Requires Node.js
 npx http-server .
+
+# Then open http://localhost:8080 in your browser
+# On mobile: http://<YOUR_IP>:8080 (find YOUR_IP with `ipconfig` or `ifconfig`)
 ```
+
+### Option 3: Add to home screen (iOS/Android)
+1. Open in Safari (iOS) or Chrome (Android)
+2. Tap **Share** → **Add to Home Screen**
+3. Launch the app from your home screen for full-screen experience
 
 ## What's inside
 
@@ -25,46 +39,103 @@ npx http-server .
 
 Three card types: **multiple choice** (a–d, instant feedback), **open questions** (answer aloud like in an interview, then self-assess), and **code snippets** (predict the output / spot the bug / fill in the blank). Every card has a **Show solution** button with the answer and an explanation.
 
-Progress (answers, self-assessments, filters, position) is saved in `localStorage`. Keyboard: `←`/`→` navigate, `S` toggles the solution, `A`–`D` answer multiple choice.
+Progress (answers, self-assessments, filters, position) is saved in `localStorage`.
 
-## Project structure
+## Controls
+
+### Keyboard (desktop)
+- **←** / **→**: Navigate between cards
+- **S**: Show/hide solution
+- **A**–**D**: Answer multiple choice questions
+
+### Touch (mobile/tablet)
+- **Swipe left/right**: Navigate between cards (or use Previous/Next buttons)
+- **Tap "Show solution"**: Toggle solution visibility
+- **Tap option**: Select answer (instant feedback)
+
+## Features
+
+- **Responsive design**: Optimized for phones (320px+), tablets, and desktops
+- **Dark mode**: Automatically follows system preference
+- **Category filters**: Choose specific topics or mixed sets
+- **Difficulty levels**: Basic, Medium, Advanced
+- **Question types**: Multiple choice, open questions, code snippets
+- **Search**: Find questions by keyword
+- **Progress tracking**: Keeps track of mastered, reviewed, and unseen cards
+- **Shuffle mode**: Randomize card order for varied practice
+- **Reset option**: Clear progress and start fresh
+- **Keyboard navigation**: Efficient desktop workflow
+- **Touch-optimized**: 44px+ tap targets on mobile devices
+
+## Project Structure
 
 ```
-index.html              page skeleton
+index.html              Page skeleton with meta tags for mobile
 css/
-  base.css              design tokens, reset, typography
-  layout.css            page structure
-  components.css        cards, chips, buttons, options, solution panel
-  media-queries.css     ALL responsive + dark-mode rules (kept separate on purpose)
+  base.css              Design tokens, reset, typography, focus states
+  layout.css            Page structure (header, main, nav, footer)
+  components.css        Cards, chips, buttons, filters, solution panel
+  media-queries.css     All responsive rules + dark mode + safe areas
 js/
-  utils.js              helpers (escaping, formatting, shuffle)
+  utils.js              Helpers (escaping, formatting, shuffle)
   storage.js            localStorage persistence
-  state.js              filters, deck order, progress
-  quiz.js               multiple-choice logic
-  flashcards.js         card rendering + solution panel
-  filters.js            filter bar UI
-  app.js                bootstrap + keyboard shortcuts
-  data/                 one question-bank file per topic + index.js aggregator
+  state.js              Filters, deck order, progress tracking
+  quiz.js               Multiple-choice logic
+  flashcards.js         Card rendering + solution panel
+  filters.js            Filter bar UI and search
+  sets.js               Predefined question set combinations
+  sets-ui.js            Set selector UI
+  app.js                Bootstrap + keyboard shortcuts
+  data/                 One question-bank file per topic
+    index.js            Aggregates all question banks
+    [topic]-questions.js Question data for each category
 tools/
-  validate-data.js      schema validator — node tools/validate-data.js
+  validate-data.js      Schema validator (run: node tools/validate-data.js)
 ```
 
-## Adding questions
+## Browser Support
 
-Append objects to any file in `js/data/` (or add a new bank file plus a `<script>` tag in `index.html` — `data/index.js` picks up new banks automatically). Schema:
+| Browser | Mobile | Tablet | Desktop |
+|---------|--------|--------|---------|
+| Chrome/Edge | ✅ | ✅ | ✅ |
+| Safari | ✅ | ✅ | ✅ |
+| Firefox | ✅ | ✅ | ✅ |
+| Samsung Internet | ✅ | — | — |
 
+All modern browsers supporting ES6+, CSS Grid, and CSS Custom Properties.
+
+## Adding Questions
+
+Append objects to any file in `js/data/` (or create a new one and add a `<script>` tag in `index.html` — `data/index.js` picks up new banks automatically).
+
+Schema:
 ```js
 {
-  id: "jsb-026",                  // unique
+  id: "jsb-026",                  // unique identifier
   category: "javascript",         // html | css | javascript | cs50 | ai | interview
   difficulty: "basic",            // basic | medium | advanced
   type: "mcq",                    // mcq | open | code
   question: "Text, `inline code` allowed",
-  code: null,                     // or a snippet string with \n newlines
+  code: null,                     // or a code snippet string with \n for newlines
   options: { a: "...", b: "...", c: "...", d: "..." },  // mcq only, else null
   answer: "b",                    // mcq only, else null
   solution: "Answer + explanation shown by the Show solution button"
 }
 ```
 
-Then run `node tools/validate-data.js` to check the schema.
+Validate your changes:
+```bash
+node tools/validate-data.js
+```
+
+## Performance Tips
+
+- **Keyboard shortcuts**: Use arrow keys instead of clicking for faster navigation
+- **Shuffle mode**: Mix up card order to avoid memorization
+- **Filtered sets**: Practice specific categories to build deeper knowledge
+- **Search**: Find weak areas quickly
+- **Dark mode**: Easier on eyes during late study sessions
+
+## Privacy
+
+All data is stored locally in your browser (`localStorage`). No data is sent to any server or external service. Progress, settings, and answers are yours alone.
