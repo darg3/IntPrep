@@ -34,6 +34,8 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -46,6 +48,10 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent pinch-zoom on iOS input focus */
+  touch-action: manipulation;
 }
 
 h1,
@@ -59,11 +65,18 @@ button {
   font: inherit;
   color: inherit;
   cursor: pointer;
+  border: none;
+  background: none;
+  /* Prevent gray highlight on mobile click */
+  -webkit-tap-highlight-color: transparent;
 }
 
-select {
+select,
+input[type="search"] {
   font: inherit;
   color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 code {
