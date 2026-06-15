@@ -14,6 +14,10 @@
   .card {
     padding: 22px;
   }
+
+  #card-area {
+    min-height: 280px;
+  }
 }
 
 /* Phones */
@@ -63,7 +67,12 @@
     flex: 1 1 45%;
   }
 
-  .filter-field select {
+  .filter-field--search {
+    flex: 1 1 100%;
+  }
+
+  .filter-field select,
+  .filter-field input[type="search"] {
     flex: 1;
     min-width: 0;
   }
@@ -156,6 +165,22 @@
     --inline-code-bg: #2a3349;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
   }
+
+  .tok-keyword {
+    color: #d896ff;
+  }
+
+  .tok-string {
+    color: #c8e6a0;
+  }
+
+  .tok-comment {
+    color: #708090;
+  }
+
+  .tok-number {
+    color: #ffb380;
+  }
 }
 
 /* Respect users who prefer less motion */
@@ -163,7 +188,11 @@
   .btn,
   .chip,
   .option,
-  .progress-fill {
+  .progress-fill,
+  .card,
+  .solution,
+  .deck-complete {
+    animation: none;
     transition: none;
   }
 }

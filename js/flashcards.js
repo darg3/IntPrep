@@ -17,6 +17,14 @@ var Flashcards = {
     var question = State.current();
     Flashcards.solutionVisible = false;
 
+    if (State.deckComplete) {
+      var deckCompleteDiv = Flashcards.buildDeckCompleteScreen();
+      area.innerHTML = "";
+      area.appendChild(deckCompleteDiv);
+      Flashcards.updateChrome();
+      return;
+    }
+
     if (!question) {
       area.innerHTML =
         '<div class="empty-state">' +
@@ -42,7 +50,7 @@ var Flashcards = {
       var pre = document.createElement("pre");
       pre.className = "code-block";
       var codeEl = document.createElement("code");
-      codeEl.textContent = question.code;
+      codeEl.innerHTML = Utils.highlightCode(question.code);
       pre.appendChild(codeEl);
       card.appendChild(pre);
     }
@@ -69,6 +77,70 @@ var Flashcards = {
     area.innerHTML = "";
     area.appendChild(card);
     Flashcards.updateChrome();
+  },
+
+  buildDeckCompleteScreen: function () {
+    var stats = State.statsFor(State.order);
+    var percentage = stats.total === 0 ? 0 : Math.round((stats.mastered / stats.total) * 100);
+
+    var container = document.createElement("div");
+    container.className = "deck-complete";
+
+    var heading = document.createElement("h2");
+    heading.textContent = "🎉 Deck complete!";
+    container.appendChild(heading);
+
+    var masteredStat = document.createElement("div");
+    masteredStat.className = "deck-stat";
+    var masteredValue = document.createElement("span");
+    masteredValue.className = "value";
+    masteredValue.textContent = stats.mastered + " / " + stats.total;
+    masteredStat.appendChild(masteredValue);
+    var masteredLabel = document.createElement("p");
+    masteredLabel.textContent = "Mastered (" + percentage + "%)";
+    masteredStat.appendChild(masteredLabel);
+    container.appendChild(masteredStat);
+
+    if (stats.wrong > 0 || stats.review > 0) {
+      var weakStat = document.createElement("div");
+      weakStat.className = "deck-stat";
+      var weakValue = document.createElement("span");
+      weakValue.className = "value";
+      weakValue.textContent = (stats.wrong + stats.review);
+      weakStat.appendChild(weakValue);
+      var weakLabel = document.createElement("p");
+      weakLabel.textContent = "Wrong or to review";
+      weakStat.appendChild(weakLabel);
+      container.appendChild(weakStat);
+    }
+
+    var actions = document.createElement("div");
+    actions.className = "deck-actions";
+
+    var restartBtn = document.createElement("button");
+    restartBtn.type = "button";
+    restartBtn.className = "btn btn-primary";
+    restartBtn.textContent = "Start over";
+    restartBtn.addEventListener("click", function () {
+      State.goTo(0);
+      Flashcards.render();
+    });
+    actions.appendChild(restartBtn);
+
+    if (stats.wrong > 0 || stats.review > 0) {
+      var reviewBtn = document.createElement("button");
+      reviewBtn.type = "button";
+      reviewBtn.className = "btn btn-ghost btn-danger";
+      reviewBtn.textContent = "Show wrong / review only";
+      reviewBtn.addEventListener("click", function () {
+        State.setStatus("weak");
+        Flashcards.render();
+      });
+      actions.appendChild(reviewBtn);
+    }
+
+    container.appendChild(actions);
+    return container;
   },
 
   buildMeta: function (question) {

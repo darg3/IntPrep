@@ -23,7 +23,12 @@
       "PowerShell(node -e \"global.window = {}; require\\('D:/DPO/01. Code/03-IntPrep/js/data/interview-behavioral-questions.js'\\); const q = window.QUESTION_BANKS['interview-behavioral']; console.log\\('count:', q.length\\); console.log\\('ids:', q.map\\(x => x.id\\).join\\(','\\)\\); console.log\\('types:', q.map\\(x => x.type\\).join\\(','\\)\\); console.log\\('mcq answers valid:', q.filter\\(x => x.type === 'mcq'\\).every\\(x => x.options && Object.keys\\(x.options\\).includes\\(x.answer\\)\\)\\);\")",
       "PowerShell(node -e \"global.window={}; require\\('D:/DPO/01. Code/03-IntPrep/js/data/interview-web-questions.js'\\); const q=window.QUESTION_BANKS['interview-web']; console.log\\('total', q.length\\); const t={},d={}; q.forEach\\(x=>{t[x.type]=\\(t[x.type]||0\\)+1; d[x.difficulty]=\\(d[x.difficulty]||0\\)+1;}\\); console.log\\('types', JSON.stringify\\(t\\)\\); console.log\\('diff', JSON.stringify\\(d\\)\\); console.log\\('ids ok', q.every\\(\\(x,i\\)=>x.id==='intw-'+String\\(i+1\\).padStart\\(3,'0'\\)\\)\\); console.log\\('cat ok', q.every\\(x=>x.category==='interview'\\)\\); console.log\\('mcq ok', q.filter\\(x=>x.type==='mcq'\\).every\\(x=>x.options&&['a','b','c','d'].includes\\(x.answer\\)\\)\\); console.log\\('code ok', q.filter\\(x=>x.type==='code'\\).every\\(x=>typeof x.code==='string'\\)\\); console.log\\('answers', q.filter\\(x=>x.type==='mcq'\\).map\\(x=>x.answer\\).join\\(''\\)\\)\")",
       "PowerShell(node --check \"D:\\\\DPO\\\\01. Code\\\\03-IntPrep\\\\js\\\\data\\\\interview-systems-questions.js\")",
-      "PowerShell(node --check \"D:\\\\DPO\\\\01. Code\\\\03-IntPrep\\\\js\\\\data\\\\interview-web-questions.js\")"
+      "PowerShell(node --check \"D:\\\\DPO\\\\01. Code\\\\03-IntPrep\\\\js\\\\data\\\\interview-web-questions.js\")",
+      "Skill(run)",
+      "PowerShell(Start-Process \"http://localhost:8000\")",
+      "Bash(curl -s \"http://localhost:8000/\")",
+      "PowerShell(node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\utils.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\state.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\filters.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\flashcards.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\app.js\" ; \"All JS files have valid syntax\")",
+      "PowerShell(node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\utils.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\state.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\filters.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\flashcards.js\" ; node -c \"D:\\\\Code\\\\AI\\\\07-IntPrep\\\\js\\\\app.js\" ; \"All JS files have valid syntax ✓\")"
     ]
   }
 }
