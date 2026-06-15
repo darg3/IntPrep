@@ -3,7 +3,9 @@
 
 var Filters = {
   build: function () {
+    SetsUI.build();
     Filters.buildCategoryChips();
+    SetsUI.render();
 
     var difficulty = document.getElementById("difficulty-select");
     var type = document.getElementById("type-select");

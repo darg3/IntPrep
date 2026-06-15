@@ -6,6 +6,8 @@ var State = {
   order: [],
   index: 0,
   shuffled: false,
+  currentSet: null,
+  setsList: [],
   filters: { category: "all", difficulty: "all", type: "all" },
 
   /* progress[id] = { result: "correct"|"wrong"|"known"|"review", choice: "a"|"b"|"c"|"d"|null } */
@@ -13,6 +15,7 @@ var State = {
 
   init: function (questions, saved) {
     State.all = questions || [];
+    State.setsList = window.QUESTION_SETS || [];
     if (saved && typeof saved === "object") {
       if (saved.filters) {
         State.filters.category = saved.filters.category || "all";
@@ -20,6 +23,7 @@ var State = {
         State.filters.type = saved.filters.type || "all";
       }
       State.shuffled = !!saved.shuffled;
+      State.currentSet = saved.currentSet || null;
       State.progress = saved.progress || {};
     }
     State.applyFilters({ keepIndex: false });
@@ -30,7 +34,25 @@ var State = {
 
   applyFilters: function (opts) {
     var f = State.filters;
-    var list = State.all.filter(function (q) {
+    var baseList = State.all;
+
+    /* If a set is selected, start with just the set's questions. */
+    if (State.currentSet) {
+      var set = null;
+      for (var i = 0; i < State.setsList.length; i++) {
+        if (State.setsList[i].id === State.currentSet) {
+          set = State.setsList[i];
+          break;
+        }
+      }
+      if (set) {
+        baseList = State.all.filter(function (q) {
+          return set.questionIds.indexOf(q.id) !== -1;
+        });
+      }
+    }
+
+    var list = baseList.filter(function (q) {
       return (f.category === "all" || q.category === f.category) &&
         (f.difficulty === "all" || q.difficulty === f.difficulty) &&
         (f.type === "all" || q.type === f.type);
@@ -44,6 +66,11 @@ var State = {
 
   current: function () {
     return State.order[State.index] || null;
+  },
+
+  selectSet: function (setId) {
+    State.currentSet = setId || null;
+    State.applyFilters({ keepIndex: false });
   },
 
   next: function () {
@@ -112,6 +139,7 @@ var State = {
     Store.save({
       filters: State.filters,
       shuffled: State.shuffled,
+      currentSet: State.currentSet,
       index: State.index,
       progress: State.progress
     });
