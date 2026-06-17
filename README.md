@@ -62,6 +62,7 @@ Progress (answers, self-assessments, filters, position) is saved in `localStorag
 - **Question types**: Multiple choice, open questions, code snippets
 - **Search**: Find questions by keyword
 - **Progress tracking**: Keeps track of mastered, reviewed, and unseen cards
+- **Dashboard**: Training time (active study time) and accuracy stats in one panel
 - **Shuffle mode**: Randomize card order for varied practice
 - **Reset option**: Clear progress and start fresh
 - **Keyboard navigation**: Efficient desktop workflow
@@ -85,6 +86,8 @@ js/
   filters.js            Filter bar UI and search
   sets.js               Predefined question set combinations
   sets-ui.js            Set selector UI
+  timer.js              Active study-time tracking (idle-paused)
+  dashboard.js          Dashboard modal: training time + accuracy
   app.js                Bootstrap + keyboard shortcuts
   data/                 One question-bank file per topic
     index.js            Aggregates all question banks

@@ -60,9 +60,10 @@ var Filters = {
     });
 
     document.getElementById("reset-btn").addEventListener("click", function () {
-      var sure = window.confirm("Reset all progress? Your answers and self-assessments will be cleared.");
+      var sure = window.confirm("Reset all progress? Your answers, self-assessments and training time will be cleared.");
       if (!sure) { return; }
       State.resetProgress();
+      Timer.reset();
       Filters.syncChips();
       Flashcards.render();
     });

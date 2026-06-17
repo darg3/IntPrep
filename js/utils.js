@@ -35,6 +35,17 @@ var Utils = {
     return str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
   },
 
+  /* Human-readable duration: "2h 14m", "4m 30s", "45s". */
+  formatDuration: function (ms) {
+    var totalSec = Math.floor((ms || 0) / 1000);
+    var h = Math.floor(totalSec / 3600);
+    var m = Math.floor((totalSec % 3600) / 60);
+    var s = totalSec % 60;
+    if (h > 0) { return h + "h " + m + "m"; }
+    if (m > 0) { return m + "m " + s + "s"; }
+    return s + "s";
+  },
+
   /* Syntax highlighting: escapes HTML, then wraps tokens in spans. */
   highlightCode: function (code) {
     var escaped = Utils.escapeHtml(code);
