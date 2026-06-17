@@ -17,6 +17,9 @@ var App = {
     State.init(window.ALL_QUESTIONS || [], Store.load());
     Filters.build();
     Flashcards.render();
+    Timer.start();
+
+    document.getElementById("dashboard-btn").addEventListener("click", Dashboard.open);
 
     document.getElementById("prev-btn").addEventListener("click", function () {
       if (State.prev()) { Flashcards.render(); }
@@ -32,6 +35,7 @@ var App = {
   },
 
   onKeydown: function (event) {
+    if (Dashboard.isOpen) { return; }
     var tag = (event.target && event.target.tagName || "").toLowerCase();
     if (tag === "input" || tag === "select" || tag === "textarea") { return; }
     if (event.ctrlKey || event.metaKey || event.altKey) { return; }

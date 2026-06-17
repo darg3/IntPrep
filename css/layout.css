@@ -30,6 +30,13 @@
   font-size: 0.9rem;
 }
 
+.header-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
 .header-stats {
   text-align: right;
   font-size: 0.9rem;

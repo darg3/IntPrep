@@ -21,6 +21,11 @@
     min-height: 44px;
   }
 
+  .modal-close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
   /* Remove hover effects on touch */
   .btn:hover,
   .chip:hover,
@@ -55,6 +60,13 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+  }
+
+  .header-aside {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .header-stats {
@@ -150,6 +162,16 @@
   .site-footer {
     display: none; /* keyboard hints are meaningless on touch screens */
   }
+
+  .modal-overlay {
+    padding: 12px;
+    align-items: flex-end; /* slide up from the bottom, easier to reach */
+  }
+
+  .modal {
+    padding: 20px;
+    max-height: 88vh;
+  }
 }
 
 /* Very small phones */
@@ -220,7 +242,9 @@
   .progress-fill,
   .card,
   .solution,
-  .deck-complete {
+  .deck-complete,
+  .modal,
+  .modal-overlay {
     animation: none;
     transition: none;
   }
